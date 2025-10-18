@@ -1,0 +1,53 @@
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 10px 28px; /* уменьшено */
+    font-size: 14px;    /* уменьшено */
+    line-height: 1.2;
+    border: 1px solid #1F1E1E;
+    background-color: transparent;
+    border-radius: 0;
+    font-weight: 600;
+    color: #1F1E1E;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn:hover,
+.btn:active {
+    background-color: #1F1E1E;
+    color: #ffffff;
+}
+
+.btn--red {
+    background-color: #BC3324;
+    border-color: #BC3324;
+    color: #ffffff;
+}
+
+.btn--black {
+    padding: 6px 28px; /* уменьшено */
+    line-height: 1.2;
+    background-color: #1F1E1E;
+    border-color: #1F1E1E;
+    color: #ffffff;
+}
+
+.btn--black:hover,
+.btn--black:active {
+    background-color: #A51505;
+    color: #ffffff;
+}
+
+/* --- адаптив под разные экраны --- */
+@media (min-width: 1600px) {
+  .btn {
+    padding: 15px 40px; /* крупнее на больших экранах */
+    font-size: 16px;
+  }
+
+  .btn--black {
+    padding: 7.5px 40px;
+  }
+}

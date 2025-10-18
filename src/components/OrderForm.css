@@ -1,0 +1,76 @@
+/* Базовые компактные стили */
+.order-form {
+  font-size: 0.8rem; /* компактный шрифт на FullHD */
+}
+
+.order-form__placeholder {
+  font-size: 0.8rem;
+  color: #777;
+  padding: 10px;
+}
+
+.order-form__items {
+  font-size: 0.8rem;
+  padding-left: 18px;
+  margin: 0;
+}
+
+.ant-form-item {
+  margin-bottom: 12px; /* меньше отступ */
+}
+
+.ant-form-item-label > label {
+  font-size: 0.8rem;
+}
+
+.ant-input,
+.ant-select-selector {
+  font-size: 0.8rem !important;
+  height: 28px !important; /* компактная высота */
+  padding: 2px 8px !important;
+}
+
+.ant-select-selection-item {
+  line-height: 26px !important;
+}
+
+.ant-btn {
+  font-size: 0.8rem;
+  height: 32px;
+  border-radius: 4px;
+}
+
+.ant-btn-primary {
+  background-color: #1890ff;
+}
+
+.ant-btn-primary:hover {
+  background-color: #1677c6;
+}
+
+/* --- Для экранов 2K и больше --- */
+@media (min-width: 2200px) {
+  .order-form {
+    font-size: 0.9rem;
+  }
+
+  .order-form__placeholder,
+  .order-form__items {
+    font-size: 0.9rem;
+  }
+
+  .ant-form-item-label > label {
+    font-size: 0.9rem;
+  }
+
+  .ant-input,
+  .ant-select-selector {
+    font-size: 0.9rem !important;
+    height: 32px !important;
+  }
+
+  .ant-btn {
+    font-size: 0.9rem;
+    height: 36px;
+  }
+}

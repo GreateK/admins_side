@@ -1,0 +1,92 @@
+.order-card {
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px; /* компактно на FullHD */
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  font-size: 0.75rem; /* ~12px на FullHD */
+  line-height: 1.2;
+}
+
+.order-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-id {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #333;
+}
+
+.order-date {
+  font-size: 0.7rem;
+  color: #777;
+}
+
+.order-user {
+  font-size: 0.75rem;
+  color: #555;
+}
+
+.order-items {
+  font-size: 0.75rem;
+  color: #444;
+}
+
+.order-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+.order-actions button {
+  padding: 3px 6px;
+  font-size: 0.7rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #218838;
+}
+
+/* --- Для экранов 2K и больше (2200px и выше) --- */
+@media (min-width: 2200px) {
+  .order-card {
+    padding: 10px 14px;
+    gap: 4px;
+    font-size: 0.85rem; /* немного больше */
+  }
+
+  .order-id {
+    font-size: 0.95rem;
+  }
+
+  .order-date,
+  .order-user,
+  .order-items {
+    font-size: 0.85rem;
+  }
+
+  .order-actions button {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+}
