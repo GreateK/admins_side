@@ -17,6 +17,8 @@ import 'antd/dist/reset.css';
 
 const { TextArea } = Input;
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
+
 const ProductForm = ({ product, categories, onSuccess }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
@@ -37,7 +39,7 @@ const ProductForm = ({ product, categories, onSuccess }) => {
             uid: String(img.id),
             name: `image_${img.id}`,
             status: 'done',
-            url: `/api${img.image_url}`,
+            url: `${BASE_URL}${img.image_url}`,
             response: { id: img.id },
           }))
         );
@@ -45,7 +47,7 @@ const ProductForm = ({ product, categories, onSuccess }) => {
     } else {
       setFileList([]);
     }
-  }, [product]);
+  }, [product, form]);
 
   const getChangedFields = (values, product) => {
     if (!product) return values;
@@ -70,29 +72,23 @@ const ProductForm = ({ product, categories, onSuccess }) => {
       let savedProduct;
 
       if (product) {
-        const res = await axios.patch(
-          `/api/products/${product.id}`,
-          payload
-        );
+        const res = await axios.patch(`${BASE_URL}/products/${product.id}`, payload);
         savedProduct = res.data;
         message.success('Товар успешно обновлён');
       } else {
-        const res = await axios.post(
-          '/api/products/',
-          payload
-        );
+        const res = await axios.post(`${BASE_URL}/products/`, payload);
         savedProduct = res.data;
         message.success('Товар успешно создан');
       }
 
-      // Загружаем новые фото
+      // 🖼️ Загрузка новых фото
       for (const file of fileList) {
         if (file.originFileObj) {
           const formData = new FormData();
           formData.append('file', file.originFileObj);
 
           await axios.post(
-            `/api/products/${savedProduct.id}/upload-image`,
+            `${BASE_URL}/products/${savedProduct.id}/upload-image`,
             formData,
             { headers: { 'Content-Type': 'multipart/form-data' } }
           );
@@ -121,9 +117,7 @@ const ProductForm = ({ product, categories, onSuccess }) => {
   const handleRemove = async (file) => {
     try {
       if (file.response?.id) {
-        await axios.delete(
-          `/api/products/images/${file.response.id}`
-        );
+        await axios.delete(`${BASE_URL}/products/images/${file.response.id}`);
         message.success('Изображение удалено');
       }
       return true;

@@ -6,6 +6,8 @@ import './OrderForm.css';
 
 const { Option } = Select;
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
+
 const OrderForm = ({ order, onOrderUpdated }) => {
   const [form] = Form.useForm();
 
@@ -30,11 +32,11 @@ const OrderForm = ({ order, onOrderUpdated }) => {
         })),
       };
 
-      await axios.put(`/api/orders/${order.id}`, payload);
+      await axios.put(`${BASE_URL}/orders/${order.id}`, payload);
 
       message.success('Заказ успешно обновлён');
       if (onOrderUpdated) {
-        onOrderUpdated(); // 🔄 обновляем список заказов
+        onOrderUpdated(); 
       }
     } catch (err) {
       console.error(err);
@@ -44,10 +46,10 @@ const OrderForm = ({ order, onOrderUpdated }) => {
 
   const onDelete = async () => {
     try {
-      await axios.delete(`/api/orders/${order.id}`);
+      await axios.delete(`${BASE_URL}/orders/${order.id}`);
       message.success('Заказ удалён');
       if (onOrderUpdated) {
-        onOrderUpdated(); // 🔄 обновляем список заказов
+        onOrderUpdated(); 
       }
     } catch (err) {
       console.error(err);

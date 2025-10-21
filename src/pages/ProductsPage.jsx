@@ -1,9 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
 import ProductForm from "../components/ProductForm";
-import { useEffect, useState } from 'react';
-import '../components/container.css';
+import { useEffect, useState } from "react";
+import "../components/container.css";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -11,14 +13,22 @@ function ProductsPage() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [editProduct, setEditProduct] = useState(null);
 
-  const fetchProducts = () => {
-    axios.get('/api/products/')
-      .then(res => setProducts(res.data));
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/products/`);
+      setProducts(res.data);
+    } catch (error) {
+      console.error("Ошибка при загрузке товаров:", error);
+    }
   };
 
-  const fetchCategories = () => {
-    axios.get('/api/categories/')
-      .then(res => setCategories(res.data));
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/categories/`);
+      setCategories(res.data);
+    } catch (error) {
+      console.error("Ошибка при загрузке категорий:", error);
+    }
   };
 
   useEffect(() => {
@@ -26,28 +36,35 @@ function ProductsPage() {
     fetchCategories();
   }, []);
 
-const handleDelete = async (id) => {
-  try {
-    await axios.delete(`/api/products/${id}`);
-    fetchProducts(); 
-  } catch (error) {
-    console.error(error);
-  }
-};
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${BASE_URL}/products/${id}`);
+      fetchProducts();
+    } catch (error) {
+      console.error("Ошибка при удалении товара:", error);
+    }
+  };
 
   const handleEdit = (product) => {
     setEditProduct(product);
   };
 
   const filteredProducts = selectedCategoryId
-    ? products.filter(p => p.catigory === selectedCategoryId)
+    ? products.filter((p) => p.catigory === selectedCategoryId)
     : products;
 
   const groupedProducts = selectedCategoryId
-    ? [{ id: selectedCategoryId, tittle: categories.find(c => c.id === selectedCategoryId)?.tittle || '', products: filteredProducts }]
-    : categories.map(category => ({
+    ? [
+        {
+          id: selectedCategoryId,
+          tittle:
+            categories.find((c) => c.id === selectedCategoryId)?.tittle || "",
+          products: filteredProducts,
+        },
+      ]
+    : categories.map((category) => ({
         ...category,
-        products: products.filter(p => p.catigory === category.id),
+        products: products.filter((p) => p.catigory === category.id),
       }));
 
   return (
@@ -58,10 +75,10 @@ const handleDelete = async (id) => {
       />
       <div className="container">
         <div className="container__list">
-          {groupedProducts.map(group => (
+          {groupedProducts.map((group) => (
             <div key={group.id}>
               {!selectedCategoryId && <h2>{group.tittle}</h2>}
-              {group.products.map(product => (
+              {group.products.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}

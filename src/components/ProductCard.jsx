@@ -2,27 +2,27 @@ import { Image, Card } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import './ProductCard.css';
 
-const BASE_URL = "/api"; 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
 const ProductCard = ({ product, onEdit, onDelete }) => {
   const actions = [
     <EditOutlined key="edit" onClick={() => onEdit(product)} />,
-    <DeleteOutlined key="delete" onClick={() => onDelete(product.id)} />
+    <DeleteOutlined key="delete" onClick={() => onDelete(product.id)} />,
   ];
 
+  // Базовое изображение-заглушка
   let imageUrl = '/no-image.png';
 
+  // Если у товара есть изображения
   if (product.images?.length > 0) {
     const rawUrl = product.images[0].image_url;
 
     if (rawUrl) {
       if (rawUrl.startsWith('/media')) {
         imageUrl = `${BASE_URL}${rawUrl}`;
-      }
-      else if (rawUrl.startsWith('http')) {
+      } else if (rawUrl.startsWith('http')) {
         imageUrl = rawUrl;
-      }
-      else {
+      } else {
         imageUrl = `${BASE_URL}/media/${rawUrl}`;
       }
     }

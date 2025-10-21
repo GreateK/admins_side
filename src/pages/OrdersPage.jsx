@@ -5,18 +5,24 @@ import OrderForm from "../components/OrderForm";
 import { useEffect, useState } from 'react';
 import '../components/container.css';
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [editOrder, setEditOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchOrders = () => {
-    axios.get('/api/orders/')
+    setLoading(true);
+    setError(null);
+
+    axios.get(`${BASE_URL}/orders/`)
       .then(res => {
         setOrders(res.data);
 
-        // Формируем список уникальных статусов + пункт "Все заказы"
         const uniqueStatuses = [
           { id: 'all', title: 'Все заказы' },
           ...[...new Set(res.data.map(o => o.status))].map((status, idx) => ({
@@ -26,7 +32,11 @@ function OrdersPage() {
         ];
         setStatuses(uniqueStatuses);
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+        setError('Ошибка при загрузке заказов');
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -39,7 +49,7 @@ function OrdersPage() {
 
   const handleCategorySelect = (statusTitle) => {
     if (statusTitle === 'Все заказы') {
-      setSelectedStatus(null); // сброс фильтра
+      setSelectedStatus(null); 
     } else {
       setSelectedStatus(statusTitle);
     }
@@ -63,10 +73,18 @@ function OrdersPage() {
       <Header
         categories={statuses}
         onCategorySelect={handleCategorySelect}
+        selectedCategory={selectedStatus}
       />
+
       <div className="container">
         <div className="container__list">
-          {groupedOrders.map(group => (
+          {loading && <p>Загрузка заказов...</p>}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {!loading && !error && groupedOrders.length === 0 && (
+            <p>Заказов пока нет</p>
+          )}
+
+          {!loading && !error && groupedOrders.map(group => (
             <div key={group.id}>
               {!selectedStatus && <h3>{group.title}</h3>}
               {group.orders.map(order => (
@@ -79,6 +97,7 @@ function OrdersPage() {
             </div>
           ))}
         </div>
+
         <div className="container__form">
           <OrderForm order={editOrder} onOrderUpdated={fetchOrders} />
         </div>
